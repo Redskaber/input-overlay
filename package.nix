@@ -79,6 +79,15 @@ stdenv.mkDerivation rec {
     sed -i '/set(CMAKE_CXX_FLAGS "-march=native")/d' source/CMakeLists.txt
   '';
 
+  installPhase = ''
+    runHook preInstall
+    cmake --install .
+    runHook postInstall
+
+    mv $out/lib/obs-plugins/obs-plugins/* $out/lib/obs-plugins/
+    rm -rf $out/lib/obs-plugins/obs-plugins
+  '';
+
   dontWrapQtApps = true;
 
   meta = with lib; {
